@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Rocket, Loader2 } from "lucide-react";
@@ -6,6 +6,7 @@ import { Rocket, Loader2 } from "lucide-react";
 interface StartupFormProps {
   onSubmit: (data: StartupFormData) => void;
   isLoading: boolean;
+  initialData?: StartupFormData;
 }
 
 export interface StartupFormData {
