@@ -14,7 +14,59 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      startup_analyses: {
+        Row: {
+          analysis_result: Json
+          business_model: string
+          challenges: string
+          created_at: string
+          id: string
+          overall_score: number
+          parent_id: string | null
+          startup_idea: string
+          target_market: string
+          user_id: string
+          value_proposition: string
+          version: number
+        }
+        Insert: {
+          analysis_result: Json
+          business_model: string
+          challenges: string
+          created_at?: string
+          id?: string
+          overall_score?: number
+          parent_id?: string | null
+          startup_idea: string
+          target_market: string
+          user_id: string
+          value_proposition: string
+          version?: number
+        }
+        Update: {
+          analysis_result?: Json
+          business_model?: string
+          challenges?: string
+          created_at?: string
+          id?: string
+          overall_score?: number
+          parent_id?: string | null
+          startup_idea?: string
+          target_market?: string
+          user_id?: string
+          value_proposition?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "startup_analyses_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "startup_analyses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

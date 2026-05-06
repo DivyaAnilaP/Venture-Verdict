@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Rocket, Loader2 } from "lucide-react";
@@ -6,6 +6,7 @@ import { Rocket, Loader2 } from "lucide-react";
 interface StartupFormProps {
   onSubmit: (data: StartupFormData) => void;
   isLoading: boolean;
+  initialData?: StartupFormData;
 }
 
 export interface StartupFormData {
@@ -16,14 +17,18 @@ export interface StartupFormData {
   challenges: string;
 }
 
-const StartupForm = ({ onSubmit, isLoading }: StartupFormProps) => {
-  const [form, setForm] = useState<StartupFormData>({
+const StartupForm = ({ onSubmit, isLoading, initialData }: StartupFormProps) => {
+  const [form, setForm] = useState<StartupFormData>(initialData || {
     startupIdea: "",
     targetMarket: "",
     valueProposition: "",
     businessModel: "",
     challenges: "",
   });
+
+  useEffect(() => {
+    if (initialData) setForm(initialData);
+  }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
