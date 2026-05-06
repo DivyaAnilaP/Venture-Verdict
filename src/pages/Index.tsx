@@ -68,7 +68,7 @@ const Index = () => {
         value_proposition: currentFormData.valueProposition,
         business_model: currentFormData.businessModel,
         challenges: currentFormData.challenges,
-        analysis_result: results as unknown as Record<string, unknown>,
+        analysis_result: results as unknown as Record<string, never>,
         overall_score: results.overallScore,
         version: refineFrom ? refineFrom.version + 1 : 1,
         parent_id: refineFrom?.id || null,
