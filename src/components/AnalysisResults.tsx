@@ -1,58 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   TrendingUp, TrendingDown, Shield, Target, DollarSign,
-  CheckCircle2, XCircle, AlertTriangle, Lightbulb, ArrowRight
+  CheckCircle2, XCircle, AlertTriangle, Lightbulb, ArrowRight,
+  Download, Save
 } from "lucide-react";
+import ScoreGauge from "@/components/ScoreGauge";
+import SwotRadar from "@/components/SwotRadar";
+import { generatePDF } from "@/lib/pdfExport";
+import type { AnalysisData } from "@/types/analysis";
 
-interface AnalysisData {
-  overallScore: number;
-  summary: string;
-  swot: {
-    strengths: string[];
-    weaknesses: string[];
-    opportunities: string[];
-    threats: string[];
-  };
-  pros: string[];
-  cons: string[];
-  marketAnalysis: {
-    marketSize: string;
-    growthPotential: string;
-    competition: string;
-    targetAudience: string;
-  };
-  financialInsights: {
-    revenueStreams: string[];
-    estimatedInitialInvestment: string;
-    breakEvenTimeline: string;
-    pricingStrategy: string;
-  };
-  actionPlan: { step: number; action: string; timeline: string }[];
-  riskAssessment: {
-    level: string;
-    keyRisks: string[];
-    mitigationStrategies: string[];
-  };
-  recommendations: string[];
+interface AnalysisResultsProps {
+  data: AnalysisData;
+  ideaName?: string;
+  onSave?: () => void;
+  isSaved?: boolean;
 }
-
-const ScoreGauge = ({ score }: { score: number }) => {
-  const color = score >= 70 ? "text-green-600" : score >= 40 ? "text-accent" : "text-destructive";
-  return (
-    <div className="flex flex-col items-center">
-      <div className={`text-6xl font-heading font-bold ${color}`}>{score}</div>
-      <div className="text-sm text-muted-foreground mt-1">out of 100</div>
-    </div>
-  );
-};
 
 const SwotCard = ({ title, items, icon: Icon, colorClass }: { title: string; items: string[]; icon: React.ElementType; colorClass: string }) => (
   <Card className="border-border/50">
     <CardHeader className="pb-3">
       <CardTitle className="text-sm font-heading flex items-center gap-2">
-        <Icon className={`h-4 w-4 ${colorClass}`} />
-        {title}
+        <Icon className={`h-4 w-4 ${colorClass}`} /> {title}
       </CardTitle>
     </CardHeader>
     <CardContent>
@@ -68,9 +38,21 @@ const SwotCard = ({ title, items, icon: Icon, colorClass }: { title: string; ite
   </Card>
 );
 
-const AnalysisResults = ({ data }: { data: AnalysisData }) => {
+const AnalysisResults = ({ data, ideaName = "Startup Idea", onSave, isSaved }: AnalysisResultsProps) => {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      {/* Action Buttons */}
+      <div className="flex gap-3 justify-end">
+        {onSave && (
+          <Button variant="outline" onClick={onSave} disabled={isSaved}>
+            <Save className="mr-2 h-4 w-4" /> {isSaved ? "Saved ✓" : "Save Analysis"}
+          </Button>
+        )}
+        <Button variant="outline" onClick={() => generatePDF(data, ideaName)}>
+          <Download className="mr-2 h-4 w-4" /> Export PDF
+        </Button>
+      </div>
+
       {/* Score & Summary */}
       <Card className="border-primary/20 bg-gradient-to-br from-card to-secondary/30">
         <CardContent className="pt-6">
@@ -84,11 +66,16 @@ const AnalysisResults = ({ data }: { data: AnalysisData }) => {
         </CardContent>
       </Card>
 
-      {/* SWOT */}
+      {/* SWOT with Radar */}
       <div>
         <h2 className="font-heading text-xl font-bold mb-4 flex items-center gap-2">
           <Shield className="h-5 w-5 text-primary" /> SWOT Analysis
         </h2>
+        <Card className="mb-4">
+          <CardContent className="pt-6">
+            <SwotRadar swot={data.swot} />
+          </CardContent>
+        </Card>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SwotCard title="Strengths" items={data.swot.strengths} icon={TrendingUp} colorClass="text-green-600" />
           <SwotCard title="Weaknesses" items={data.swot.weaknesses} icon={TrendingDown} colorClass="text-red-500" />
@@ -166,18 +153,16 @@ const AnalysisResults = ({ data }: { data: AnalysisData }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-3 rounded-lg bg-muted/50">
-              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Initial Investment</div>
-              <div className="text-sm font-medium">{data.financialInsights.estimatedInitialInvestment}</div>
-            </div>
-            <div className="p-3 rounded-lg bg-muted/50">
-              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Break-Even</div>
-              <div className="text-sm font-medium">{data.financialInsights.breakEvenTimeline}</div>
-            </div>
-            <div className="p-3 rounded-lg bg-muted/50">
-              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Pricing Strategy</div>
-              <div className="text-sm font-medium">{data.financialInsights.pricingStrategy}</div>
-            </div>
+            {[
+              { label: "Initial Investment", value: data.financialInsights.estimatedInitialInvestment },
+              { label: "Break-Even", value: data.financialInsights.breakEvenTimeline },
+              { label: "Pricing Strategy", value: data.financialInsights.pricingStrategy },
+            ].map(({ label, value }) => (
+              <div key={label} className="p-3 rounded-lg bg-muted/50">
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">{label}</div>
+                <div className="text-sm font-medium">{value}</div>
+              </div>
+            ))}
           </div>
           <div>
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Revenue Streams</div>
@@ -231,17 +216,13 @@ const AnalysisResults = ({ data }: { data: AnalysisData }) => {
           <div>
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Key Risks</div>
             <ul className="space-y-1">
-              {data.riskAssessment.keyRisks.map((r, i) => (
-                <li key={i} className="text-sm text-muted-foreground">• {r}</li>
-              ))}
+              {data.riskAssessment.keyRisks.map((r, i) => <li key={i} className="text-sm text-muted-foreground">• {r}</li>)}
             </ul>
           </div>
           <div>
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Mitigation</div>
             <ul className="space-y-1">
-              {data.riskAssessment.mitigationStrategies.map((s, i) => (
-                <li key={i} className="text-sm text-muted-foreground">• {s}</li>
-              ))}
+              {data.riskAssessment.mitigationStrategies.map((s, i) => <li key={i} className="text-sm text-muted-foreground">• {s}</li>)}
             </ul>
           </div>
         </CardContent>
