@@ -17,14 +17,18 @@ export interface StartupFormData {
   challenges: string;
 }
 
-const StartupForm = ({ onSubmit, isLoading }: StartupFormProps) => {
-  const [form, setForm] = useState<StartupFormData>({
+const StartupForm = ({ onSubmit, isLoading, initialData }: StartupFormProps) => {
+  const [form, setForm] = useState<StartupFormData>(initialData || {
     startupIdea: "",
     targetMarket: "",
     valueProposition: "",
     businessModel: "",
     challenges: "",
   });
+
+  useEffect(() => {
+    if (initialData) setForm(initialData);
+  }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
