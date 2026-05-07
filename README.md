@@ -15,12 +15,19 @@ Built to bridge the gap between raw startup ideas and practical execution, the s
 
   
   Generative AI
+  
   React.js
+  
   Node.js
+  
   Express.js
+  
   MongoDB
+  
   REST APIs
+  
   Prompt Engineering
+  
   AI-Powered Analytics
   
 
