@@ -45,7 +45,7 @@ const AuthPage = ({ onAuth }: AuthPageProps) => {
           <div className="mx-auto h-12 w-12 rounded-xl bg-primary flex items-center justify-center mb-3">
             <Rocket className="h-6 w-6 text-primary-foreground" />
           </div>
-          <CardTitle className="font-heading text-2xl">StartupValidator</CardTitle>
+          <CardTitle className="font-heading text-2xl">Venture Verdict</CardTitle>
           <p className="text-muted-foreground text-sm mt-1">
             {isLogin ? "Sign in to save & compare your analyses" : "Create an account to get started"}
           </p>

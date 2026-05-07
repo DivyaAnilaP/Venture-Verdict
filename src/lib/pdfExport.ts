@@ -177,7 +177,7 @@ export const generatePDF = (data: AnalysisData, ideaName: string) => {
     doc.setPage(i);
     doc.setFontSize(8);
     doc.setTextColor(150);
-    doc.text(`StartupValidator Report — Page ${i}/${pageCount}`, w / 2, 290, { align: "center" });
+    doc.text(`Venture Verdict Report — Page ${i}/${pageCount}`, w / 2, 290, { align: "center" });
   }
 
   doc.save(`startup-validation-${Date.now()}.pdf`);
