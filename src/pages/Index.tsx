@@ -148,16 +148,43 @@ const Index = () => {
 
         {view === "form" && (
           <>
-            <div className="text-center space-y-3">
+            {/* Hero Section */}
+            <div className="text-center space-y-4">
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground">
                 {refineFrom ? "Refine Your Idea" : "Validate Your Startup Idea"}
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                 {refineFrom
                   ? `Iterating on v${refineFrom.version} (Score: ${refineFrom.overall_score}/100). Modify your inputs and re-analyze.`
-                  : "Get instant AI-powered analysis including SWOT, market insights, financial projections, and a step-by-step action plan."}
+                  : "An AI-powered startup validation platform that helps entrepreneurs analyze and refine business ideas through structured intelligence and real-time insights."}
               </p>
             </div>
+
+            {/* Features Grid */}
+            {!refineFrom && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[
+                  { icon: BarChart3, label: "Validation Score", desc: "AI-generated viability score with animated gauge" },
+                  { icon: Shield, label: "SWOT Analysis", desc: "Interactive radar charts & detailed breakdown" },
+                  { icon: Target, label: "Market Analysis", desc: "Market size, growth potential & competition" },
+                  { icon: DollarSign, label: "Financial Insights", desc: "Investment, break-even & revenue streams" },
+                  { icon: AlertTriangle, label: "Risk Assessment", desc: "Key risks with mitigation strategies" },
+                  { icon: FileText, label: "PDF Export", desc: "Download branded professional reports" },
+                  { icon: GitCompareArrows, label: "Compare Ideas", desc: "Side-by-side comparison with score deltas" },
+                  { icon: RefreshCcw, label: "Iterative Refinement", desc: "Re-analyze & track version improvements" },
+                ].map(({ icon: Icon, label, desc }) => (
+                  <Card key={label} className="border-border/50 bg-card/50 hover:bg-card transition-colors">
+                    <CardContent className="p-4 text-center space-y-2">
+                      <div className="mx-auto h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <Icon className="h-4 w-4 text-primary" />
+                      </div>
+                      <div className="font-heading text-sm font-semibold">{label}</div>
+                      <p className="text-xs text-muted-foreground leading-snug">{desc}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
 
             <div className="bg-card rounded-xl border border-border/50 p-6 md:p-8 shadow-sm">
               <StartupForm
