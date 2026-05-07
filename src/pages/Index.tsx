@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Rocket, Sparkles, History, LogOut } from "lucide-react";
+import { Rocket, Sparkles, History, LogOut, Shield, Target, DollarSign, AlertTriangle, BarChart3, FileText, GitCompareArrows, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import StartupForm, { type StartupFormData } from "@/components/StartupForm";
