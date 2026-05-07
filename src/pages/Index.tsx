@@ -107,7 +107,7 @@ const Index = () => {
             <Rocket className="h-5 w-5 text-primary-foreground" />
           </div>
           <h1 className="font-heading text-xl font-bold cursor-pointer"
-            onClick={() => { setView("form"); setResults(null); setRefineFrom(null); }}>StartupValidator</h1>
+            onClick={() => { setView("form"); setResults(null); setRefineFrom(null); }}>Venture Verdict</h1>
           <span className="text-xs text-muted-foreground flex items-center gap-1">
             <Sparkles className="h-3 w-3" /> AI-Powered
           </span>
