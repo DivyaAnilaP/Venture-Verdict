@@ -38,18 +38,6 @@ const AuthPage = ({ onAuth }: AuthPageProps) => {
     }
   };
 
-  const handleGoogleAuth = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      toast({ title: "Google Sign-in Failed", description: String(result.error), variant: "destructive" });
-      return;
-    }
-    if (result.redirected) return;
-    onAuth();
-  };
-
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
@@ -63,17 +51,6 @@ const AuthPage = ({ onAuth }: AuthPageProps) => {
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button variant="outline" className="w-full" onClick={handleGoogleAuth}>
-            <Chrome className="mr-2 h-4 w-4" /> Continue with Google
-          </Button>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center"><span className="w-full border-t" /></div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Or</span>
-            </div>
-          </div>
-
           <form onSubmit={handleEmailAuth} className="space-y-3">
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
